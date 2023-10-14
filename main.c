@@ -1,5 +1,6 @@
 #include <stdio.h>
-#include <threads.h>
+#include <string.h>
+#include <pthread.h>
 #include "mechanics/mechanics.h"
 
 
