@@ -1,13 +1,16 @@
+#include "../main.h"
 #include "mechanics.h"
 
 
-struct Object {
-    struct Vector2 position;
-};
-
-int five() {
-    return 5;
+void init_mechanics() {
+    
+    Object Player = {
+        GAME_DATA.player_start_position,
+        (Vector2){0,0}
+    };
+    
 }
+
 
 
 

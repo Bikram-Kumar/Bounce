@@ -1,6 +1,8 @@
+#include <stdbool.h>
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>
+
 
 #ifdef _WIN32
     #include <windows.h>
@@ -10,8 +12,8 @@
 
 
 
+#include "main.h"
 
-#include "mechanics/mechanics.h"
 
 
 
@@ -48,9 +50,22 @@ int input;
 int player_move = 0;
 int player_x = 10;
 
+S_GAME_DATA GAME_DATA = {
+    .gameover = false,
+    .player_start_position = (Vector2) {SIZE_X/2, 2/3 * SIZE_Y }
+};
+
+
+
+
+
+
+
+
+
 struct canvas {
     
-    struct Vector2 size ;
+    Vector2Int size ;
     
     char canvas[SIZE_X*SIZE_Y];
     
@@ -72,10 +87,16 @@ int main () {
 void start() {
     
     initscr();
+    noecho();
+    keypad(stdscr, TRUE);
+    
     start_color();
     init_pair(1, COLOR_GREEN, COLOR_BLACK);
+    
+    
+    init_mechanics();
+    
     set_canvas();
-   // printw("\x1b[32m"); // green color
     
     update();
 }
@@ -93,11 +114,13 @@ void update() {
     
     clear();
     draw();
+    
+    timeout(REFRESH_TIME_ms);
     input = getch();
+    
     if (input == 'g') {
-        player_move = 1;
-    }
-    if (input == 'l') {
+        player_move += 1;
+    } else if (input == 'l') {
         player_move = 0;
     }
     
@@ -109,12 +132,12 @@ void update() {
     
     if (!gameover) {
         
-        #ifdef _WIN32         
+       /* #ifdef _WIN32         
             Sleep(REFRESH_TIME);
         #else 
             nanosleep(&ts, &ts);
         #endif
-        
+        */
         
         update();
     }
@@ -134,7 +157,6 @@ void draw() {
     attroff(COLOR_PAIR(1));
     
     refresh();
-    timeout(1);
 }
 
 
@@ -161,7 +183,7 @@ void set_canvas() {
         
     }
     
-        cnvs.canvas[coord_to_px(10 + five(), 28)] = '_'; 
+        cnvs.canvas[coord_to_px(15, 28)] = '_'; 
         cnvs.canvas[coord_to_px(16, 28)] = '_'; 
         cnvs.canvas[coord_to_px(13, 26)] = 'o'; 
 }
